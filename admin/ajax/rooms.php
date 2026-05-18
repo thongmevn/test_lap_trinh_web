@@ -1,13 +1,20 @@
 <?php 
 
   require('../inc/db_config.php');
+  ob_start();
   require('../inc/essentials.php');
+  ob_end_clean();
   adminLogin();
 
   if(isset($_POST['add_room']))
   {
-    $features = filteration(json_decode($_POST['features']));
-    $facilities = filteration(json_decode($_POST['facilities']));
+    $features = json_decode($_POST['features'], true);
+    if(!is_array($features)) $features = array();
+    else $features = array_map('intval', $features);
+    
+    $facilities = json_decode($_POST['facilities'], true);
+    if(!is_array($facilities)) $facilities = array();
+    else $facilities = array_map('intval', $facilities);
 
     $frm_data = filteration($_POST);
     $flag = 0;
@@ -18,21 +25,36 @@
     if(insert($q1,$values,'siiiiis')){
       $flag = 1;
     }
+    else{
+      echo 0;   
+      exit;
+    }
     
     $room_id = mysqli_insert_id($con);
+
+    // Nếu không lấy được ID phòng
+    if(!$room_id){
+      echo 0;
+      exit;
+    }
 
     $q2 = "INSERT INTO `room_facilities`(`room_id`, `facilities_id`) VALUES (?,?)";
     if($stmt = mysqli_prepare($con,$q2))
     {
       foreach($facilities as $f){
-        mysqli_stmt_bind_param($stmt,'ii',$room_id,$f);
-        mysqli_stmt_execute($stmt);
+        if(!mysqli_stmt_bind_param($stmt,'ii',$room_id,$f)){
+          $flag = 0;
+          break;
+        }
+        if(!mysqli_stmt_execute($stmt)){
+          $flag = 0;
+          break;
+        }
       }
       mysqli_stmt_close($stmt);
     }
     else{
       $flag = 0;
-      die('query cannot be prepared - insert');
     }
 
     
@@ -40,18 +62,23 @@
     if($stmt = mysqli_prepare($con,$q3))
     {
       foreach($features as $f){
-        mysqli_stmt_bind_param($stmt,'ii',$room_id,$f);
-        mysqli_stmt_execute($stmt);
+        if(!mysqli_stmt_bind_param($stmt,'ii',$room_id,$f)){
+          $flag = 0;
+          break;
+        }
+        if(!mysqli_stmt_execute($stmt)){
+          $flag = 0;
+          break;
+        }
       }
       mysqli_stmt_close($stmt);
     }
     else{
       $flag = 0;
-      die('query cannot be prepared - insert');
     }
     
     if($flag){
-      echo 1;
+      echo $room_id;
     }
     else{
       echo 0;
@@ -95,14 +122,14 @@
           <td>$row[quantity]</td>
           <td>$status</td>
           <td>
-            <button type='button' onclick='edit_details($row[id])' class='btn btn-primary shadow-none btn-sm' data-bs-toggle='modal' data-bs-target='#edit-room'>
-              <i class='bi bi-pencil-square'></i> 
+            <button type='button' onclick='edit_details($row[id])' class='btn-custom btn-edit btn-sm' data-bs-toggle='modal' data-bs-target='#edit-room'>
+              Sửa phòng
             </button>
-            <button type='button' onclick=\"room_images($row[id],'$row[name]')\" class='btn btn-info shadow-none btn-sm' data-bs-toggle='modal' data-bs-target='#room-images'>
-              <i class='bi bi-images'></i> 
+            <button type='button' onclick=\"room_images($row[id],'$row[name]')\" class='btn-custom btn-images btn-sm' data-bs-toggle='modal' data-bs-target='#room-images'>
+              Thêm ảnh
             </button>
-            <button type='button' onclick='remove_room($row[id])' class='btn btn-danger shadow-none btn-sm'>
-              <i class='bi bi-trash'></i> 
+            <button type='button' onclick='remove_room($row[id])' class='btn-custom btn-delete btn-sm'>
+              Xóa phòng
             </button>
           </td>
         </tr>
@@ -149,65 +176,122 @@
 
   if(isset($_POST['edit_room']))
   {
-    $features = filteration(json_decode($_POST['features']));
-    $facilities = filteration(json_decode($_POST['facilities']));
+    $features = json_decode($_POST['features'] ?? '[]', true);
+    $facilities = json_decode($_POST['facilities'] ?? '[]', true);
+
+    if(!is_array($features)) $features = array();
+    else $features = array_map('intval', $features);
+
+    if(!is_array($facilities)) $facilities = array();
+    else $facilities = array_map('intval', $facilities);
 
     $frm_data = filteration($_POST);
-    $flag = 0;
+    $r_id = intval($frm_data['room_id']);
+    $flag = 1;
+
+    $room_check = select("SELECT `id` FROM `rooms` WHERE `id`=? AND `removed`=?", [$r_id,0], 'ii');
+    if(mysqli_num_rows($room_check) == 0){
+      echo 0;
+      exit;
+    }
 
     $q1 = "UPDATE `rooms` SET `name`=?,`area`=?,`price`=?,`quantity`=?,
       `adult`=?,`children`=?,`description`=? WHERE `id`=?";
-    $values = [$frm_data['name'],$frm_data['area'],$frm_data['price'],$frm_data['quantity'],$frm_data['adult'],$frm_data['children'],$frm_data['desc'],$frm_data['room_id']];
-    
-    if(update($q1,$values,'siiiiisi')){
-      $flag = 1;
+    $values = [$frm_data['name'],$frm_data['area'],$frm_data['price'],$frm_data['quantity'],$frm_data['adult'],$frm_data['children'],$frm_data['desc'],$r_id];
+    update($q1,$values,'siiiiisi');
+
+    delete("DELETE FROM `room_features` WHERE `room_id`=?", [$r_id],'i');
+    delete("DELETE FROM `room_facilities` WHERE `room_id`=?", [$r_id],'i');
+
+    $q2 = "INSERT INTO `room_facilities`(`room_id`, `facilities_id`) VALUES (?,?)";
+    if($stmt = mysqli_prepare($con,$q2)){
+      foreach($facilities as $f){
+        if(!mysqli_stmt_bind_param($stmt,'ii',$r_id,$f) || !mysqli_stmt_execute($stmt)){
+          $flag = 0;
+          break;
+        }
+      }
+      mysqli_stmt_close($stmt);
     }
-
-    $del_features = delete("DELETE FROM `room_features` WHERE `room_id`=?", [$frm_data['room_id']],'i');
-    $del_facilities = delete("DELETE FROM `room_facilities` WHERE `room_id`=?", [$frm_data['room_id']],'i');
-
-    if(!($del_facilities && $del_features)){
+    else{
       $flag = 0;
     }
 
+    if($flag){
+      $q3 = "INSERT INTO `room_features`(`room_id`, `features_id`) VALUES (?,?)";
+      if($stmt = mysqli_prepare($con,$q3)){
+        foreach($features as $f){
+          if(!mysqli_stmt_bind_param($stmt,'ii',$r_id,$f) || !mysqli_stmt_execute($stmt)){
+            $flag = 0;
+            break;
+          }
+        }
+        mysqli_stmt_close($stmt);
+      }
+      else{
+        $flag = 0;
+      }
+    }
+
+    echo $flag ? 1 : 0;
+    exit;
+
+      // SỬA TẠI ĐÂY: Loại bỏ hàm filteration bọc ngoài json_decode
+      $features = json_decode($_POST['features'] ?? '[]', true);
+      $facilities = json_decode($_POST['facilities'] ?? '[]', true);
+
+      if(!is_array($features)) $features = array();
+      else $features = array_map('intval', $features);
+
+      if(!is_array($facilities)) $facilities = array();
+      else $facilities = array_map('intval', $facilities);
+
+      $frm_data = filteration($_POST);
+      $flag = 1;
+      $r_id = intval($frm_data['room_id']);
+
+      $room_check = select("SELECT `id` FROM `rooms` WHERE `id`=? AND `removed`=?", [$r_id,0], 'ii');
+      if(mysqli_num_rows($room_check) == 0){
+        echo 0;
+        exit;
+      }
+
+      $q1 = "UPDATE `rooms` SET `name`=?,`area`=?,`price`=?,`quantity`=?,
+        `adult`=?,`children`=?,`description`=? WHERE `id`=?";
+      $values = [$frm_data['name'],$frm_data['area'],$frm_data['price'],$frm_data['quantity'],$frm_data['adult'],$frm_data['children'],$frm_data['desc'],$r_id];
+      
+      update($q1,$values,'siiiiisi');
+
+      // Xóa dữ liệu cũ
+      delete("DELETE FROM `room_features` WHERE `room_id`=?", [$r_id],'i');
+      delete("DELETE FROM `room_facilities` WHERE `room_id`=?", [$r_id],'i');
+
+ // Gán ID phòng ra một biến độc lập trước khi chạy vòng lặp
+    $r_id = intval($r_id); 
+
+    // Chèn lại Facilities mới
     $q2 = "INSERT INTO `room_facilities`(`room_id`, `facilities_id`) VALUES (?,?)";
     if($stmt = mysqli_prepare($con,$q2))
     {
       foreach($facilities as $f){
-        mysqli_stmt_bind_param($stmt,'ii',$frm_data['room_id'],$f);
+        mysqli_stmt_bind_param($stmt,'ii',$r_id,$f); // Dùng biến $r_id ở đây
         mysqli_stmt_execute($stmt);
       }
-      $flag = 1;
       mysqli_stmt_close($stmt);
     }
-    else{
-      $flag = 0;
-      die('query cannot be prepared - insert');
-    }
 
-    
+    // Chèn lại Features mới
     $q3 = "INSERT INTO `room_features`(`room_id`, `features_id`) VALUES (?,?)";
     if($stmt = mysqli_prepare($con,$q3))
     {
       foreach($features as $f){
-        mysqli_stmt_bind_param($stmt,'ii',$frm_data['room_id'],$f);
+        mysqli_stmt_bind_param($stmt,'ii',$r_id,$f); // Dùng biến $r_id ở đây
         mysqli_stmt_execute($stmt);
       }
-      $flag = 1;
       mysqli_stmt_close($stmt);
     }
-    else{
-      $flag = 0;
-      die('query cannot be prepared - insert');
-    }
-    
-    if($flag){
-      echo 1;
-    }
-    else{
-      echo 0;
-    }
-
+      
+      echo 1; // Trả về 1 để JS biết đã thành công
   }
 
   if(isset($_POST['toggle_status']))
@@ -241,9 +325,59 @@
       echo $img_r;
     }
     else{
-      $q = "INSERT INTO `room_images`(`room_id`, `image`) VALUES (?,?)";
-      $values = [$frm_data['room_id'],$img_r];
-      $res = insert($q,$values,'is');
+      // If no thumb exists for this room yet, make this the thumb
+      $thumb_res = select("SELECT COUNT(*) AS cnt FROM `room_images` WHERE `room_id`=? AND `thumb`=?", [$frm_data['room_id'],1], 'ii');
+      $thumb_row = mysqli_fetch_assoc($thumb_res);
+      $thumb = 0;
+      if(!$thumb_row || intval($thumb_row['cnt']) == 0) $thumb = 1;
+
+      $q = "INSERT INTO `room_images`(`room_id`, `image`, `thumb`) VALUES (?,?,?)";
+      $values = [$frm_data['room_id'],$img_r,$thumb];
+      $res = insert($q,$values,'isi');
+      echo $res;
+    }
+  }
+
+
+  if(isset($_POST['replace_image']))
+  {
+    $frm_data = filteration($_POST);
+
+    if(!isset($_FILES['image'])){
+      echo 'upd_failed';
+      exit;
+    }
+
+    // fetch existing record
+    $pre_q = "SELECT * FROM `room_images` WHERE `sr_no`=? AND `room_id`=?";
+    $pre_v = [$frm_data['image_id'],$frm_data['room_id']];
+    $pre_res = select($pre_q,$pre_v,'ii');
+
+    if(mysqli_num_rows($pre_res) == 0){
+      echo 0; exit;
+    }
+
+    $old = mysqli_fetch_assoc($pre_res);
+
+    $img_r = uploadImage($_FILES['image'],ROOMS_FOLDER);
+
+    if($img_r == 'inv_img'){
+      echo $img_r;
+    }
+    else if($img_r == 'inv_size'){
+      echo $img_r;
+    }
+    else if($img_r == 'upd_failed'){
+      echo $img_r;
+    }
+    else{
+      $q = "UPDATE `room_images` SET `image`=? WHERE `sr_no`=? AND `room_id`=?";
+      $v = [$img_r,$frm_data['image_id'],$frm_data['room_id']];
+      $res = update($q,$v,'sii');
+      if($res){
+        // delete old file
+        deleteImage($old['image'],ROOMS_FOLDER);
+      }
       echo $res;
     }
   }
@@ -253,30 +387,32 @@
     $frm_data = filteration($_POST);
     $res = select("SELECT * FROM `room_images` WHERE `room_id`=?",[$frm_data['get_room_images']],'i');
 
-    $path = ROOMS_IMG_PATH;
-
     while($row = mysqli_fetch_assoc($res))
     {
+      $img_src = roomImagePath($row['image']);
+
       if($row['thumb']==1){
-        $thumb_btn = "<i class='bi bi-check-lg text-light bg-success px-2 py-1 rounded fs-5'></i>";
+        $thumb_btn = "<span class='room-thumb-label'>Ảnh chính</span>";
       }
       else{
-        $thumb_btn = "<button onclick='thumb_image($row[sr_no],$row[room_id])' class='btn btn-secondary shadow-none'>
-          <i class='bi bi-check-lg'></i>
+        $thumb_btn = "<button type='button' onclick='thumb_image($row[sr_no],$row[room_id])' class='btn btn-secondary shadow-none room-action-btn'>
+          Chọn chính
         </button>";
       }
 
       echo<<<data
         <tr class='align-middle'>
-          <td><img src='$path$row[image]' class='img-fluid'></td>
+          <td><img src='$img_src' class='room-image-thumb' alt='Room image'></td>
           <td>$thumb_btn</td>
-          <td>
-            <button onclick='rem_image($row[sr_no],$row[room_id])' class='btn btn-danger shadow-none'>
+          <td class='room-image-actions'>
+            <input type="file" id="replace_input_$row[sr_no]" style="display:none" accept="image/*" onchange="replace_image(this,$row[sr_no],$row[room_id])">
+            <button type="button" onclick="document.getElementById('replace_input_$row[sr_no]').click()" class="btn btn-secondary shadow-none me-1">Thay ảnh</button>
+            <button type='button' onclick='rem_image($row[sr_no],$row[room_id])' class='btn btn-danger shadow-none'>
               <i class='bi bi-trash'></i>
             </button>
           </td>
         </tr>
-      data;
+data;
     }
 
   }
@@ -289,6 +425,12 @@
 
     $pre_q = "SELECT * FROM `room_images` WHERE `sr_no`=? AND `room_id`=?";
     $res = select($pre_q,$values,'ii');
+
+    if(mysqli_num_rows($res) == 0){
+      echo 0;
+      exit;
+    }
+
     $img = mysqli_fetch_assoc($res);
 
     if(deleteImage($img['image'],ROOMS_FOLDER)){

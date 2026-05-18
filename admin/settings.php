@@ -10,6 +10,383 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trang quản lý - Cài đặt trang</title>
   <?php require('inc/links.php'); ?>
+  <style>
+    #main-content {
+      min-height: 100vh;
+      padding: 24px;
+      background: #f4f6f8;
+    }
+
+    #main-content > .row {
+      display: block;
+      margin: 0;
+    }
+
+    #main-content .col-lg-10 {
+      width: 100%;
+      max-width: none;
+      margin: 0 auto;
+      padding: 0;
+      overflow: visible;
+    }
+
+    #main-content h3 {
+      margin: 0 0 22px;
+      font-size: 1.65rem;
+      line-height: 1.25;
+      color: #152536;
+    }
+
+    #main-content .card {
+      margin-bottom: 20px;
+      background: #fff;
+      border: 1px solid #e5eaf0 !important;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(21, 37, 54, 0.08) !important;
+    }
+
+    #main-content .card-body {
+      padding: 22px 24px;
+    }
+
+    #main-content .d-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    #main-content .card-title {
+      margin: 0;
+      color: #172432;
+      font-size: 1.08rem;
+      line-height: 1.3;
+    }
+
+    #main-content .card-subtitle {
+      margin: 0 0 6px;
+      color: #1e2d3b;
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    #main-content .card-text {
+      margin: 0 0 16px;
+      color: #4b5b68;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    #main-content .card .row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px 28px;
+      margin: 0;
+    }
+
+    #main-content .card [class*="col-"] {
+      width: auto;
+      max-width: none;
+      padding: 0;
+    }
+
+    #main-content iframe#iframe {
+      display: block;
+      width: 100%;
+      min-height: 220px;
+      border: 1px solid #dce3ea;
+      border-radius: 10px;
+      background: #f8fafc;
+    }
+
+    #main-content .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 36px;
+      padding: 8px 13px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1.2;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    #main-content .btn-dark {
+      color: #fff;
+      background: #152536;
+      border-color: #152536;
+    }
+
+    #main-content .btn-dark:hover {
+      background: #24384d;
+      border-color: #24384d;
+    }
+
+    #main-content .custom-bg,
+    #general-s .custom-bg,
+    #contacts-s .custom-bg,
+    #team-s .custom-bg {
+      color: #fff;
+      background: #2d6a4f;
+      border-color: #2d6a4f;
+    }
+
+    #main-content .form-check {
+      margin: 0;
+    }
+
+    #main-content .form-switch {
+      min-width: 54px;
+    }
+
+    #shutdown-toggle {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      margin: 0;
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: #c7d0d9;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    #shutdown-toggle::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s ease;
+    }
+
+    #shutdown-toggle:checked {
+      background: #2d6a4f;
+    }
+
+    #shutdown-toggle:checked::before {
+      transform: translateX(22px);
+    }
+
+    #team-data {
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    #team-data img {
+      width: 100%;
+      height: 260px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: #f8fafc;
+      border-radius: 10px;
+    }
+
+    #team-data .card {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #general-s .modal-dialog,
+    #team-s .modal-dialog {
+      width: min(560px, calc(100vw - 32px));
+      max-width: 560px;
+      margin: 40px auto;
+    }
+
+    #contacts-s .modal-dialog {
+      width: min(900px, calc(100vw - 32px));
+      max-width: 900px;
+      margin: 32px auto;
+    }
+
+    #general-s .modal-content,
+    #contacts-s .modal-content,
+    #team-s .modal-content {
+      overflow: hidden;
+      border: 0;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.24);
+    }
+
+    #general-s .modal-header,
+    #contacts-s .modal-header,
+    #team-s .modal-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid #e8edf2;
+      background: #fff;
+    }
+
+    #general-s .modal-title,
+    #contacts-s .modal-title,
+    #team-s .modal-title {
+      margin: 0;
+      color: #172432;
+      font-size: 1.08rem;
+      line-height: 1.3;
+    }
+
+    #general-s .modal-body,
+    #contacts-s .modal-body,
+    #team-s .modal-body {
+      max-height: calc(100vh - 210px);
+      overflow-y: auto;
+      padding: 22px;
+      background: #fbfcfd;
+    }
+
+    #general-s .mb-3,
+    #contacts-s .mb-3,
+    #team-s .mb-3 {
+      margin-bottom: 16px;
+    }
+
+    #contacts-s .container-fluid,
+    #contacts-s .row {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #contacts-s .row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    #contacts-s [class*="col-"] {
+      width: auto;
+      max-width: none;
+      padding: 0;
+    }
+
+    #general-s .form-label,
+    #contacts-s .form-label,
+    #team-s .form-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #243442;
+      font-size: 0.93rem;
+      font-weight: 700;
+    }
+
+    #general-s .form-control,
+    #contacts-s .form-control,
+    #team-s .form-control {
+      display: block;
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid #d6dde5;
+      border-radius: 8px;
+      background: #fff;
+      color: #1d2b38;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    #general-s textarea.form-control {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    #general-s .form-control:focus,
+    #contacts-s .form-control:focus,
+    #team-s .form-control:focus {
+      border-color: #2d6a4f;
+      outline: 0;
+      box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.14);
+    }
+
+    #contacts-s .input-group {
+      display: flex;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    #contacts-s .input-group-text {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      padding: 0 12px;
+      border: 1px solid #d6dde5;
+      border-right: 0;
+      border-radius: 8px 0 0 8px;
+      background: #eef3f6;
+      color: #3a4a58;
+      font-weight: 700;
+    }
+
+    #contacts-s .input-group .form-control {
+      border-radius: 0 8px 8px 0;
+    }
+
+    #general-s .modal-footer,
+    #contacts-s .modal-footer,
+    #team-s .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 22px;
+      border-top: 1px solid #e8edf2;
+      background: #fff;
+    }
+
+    #general-s .modal-footer .btn,
+    #contacts-s .modal-footer .btn,
+    #team-s .modal-footer .btn {
+      min-width: 94px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    #general-s .text-secondary,
+    #contacts-s .text-secondary,
+    #team-s .text-secondary {
+      color: #617080;
+      background: #eef2f5;
+      border-color: #eef2f5;
+    }
+
+    @media (max-width: 991px) {
+      #main-content {
+        padding: 18px;
+      }
+
+      #main-content .row,
+      #contacts-s .row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 575px) {
+      #general-s .modal-dialog,
+      #contacts-s .modal-dialog,
+      #team-s .modal-dialog {
+        width: calc(100vw - 20px);
+        margin: 20px auto;
+      }
+
+      #general-s .modal-body,
+      #contacts-s .modal-body,
+      #team-s .modal-body {
+        max-height: calc(100vh - 170px);
+        padding: 18px;
+      }
+    }
+  </style>
 </head>
 <body class="bg-light">
 
@@ -17,7 +394,7 @@
 
   <div class="container-fluid" id="main-content">
     <div class="row">
-      <div class="col-lg-10 ms-auto p-4 overflow-hidden">
+      <div class="col-lg-10 p-4 overflow-hidden">
         <h3 class="mb-4">Cài đặt trang</h3>
 
         <!-- General settings section -->
@@ -256,7 +633,7 @@
   
 
   <?php require('inc/scripts.php'); ?>
-  <script src="scripts/settings.js"></script>
+  <script src="scripts/settings.js?v=20260515-2"></script>
 
 </body>
 </html>

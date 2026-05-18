@@ -1,0 +1,96 @@
+/* ============================================
+   GLOBAL STYLES - Eco-Friendly Stay Theme
+   ============================================ */
+
+/* Color Palette */
+:root {
+  /* Primary: Forest green */
+  --primary-color: #2D6A4F;
+  --primary-hover: #1f4d38;
+  
+  /* Secondary: Light moss green */
+  --secondary-color: #B7E4C7;
+  
+  /* Accent: Cream */
+  --accent-color: #FFF8E1;
+  
+  /* Background: Earthy tan */
+  --bg-tan: #DDA15E;
+  
+  /* Neutral colors */
+  --white: #ffffff;
+  --black: #000000;
+  --gray-light: #f1f1f1;
+  --gray-dark: #242424;
+  
+  /* Font sizing */
+  --font-main: 'Lato', sans-serif;
+  --font-heading: 'Merriweather', serif;
+}
+
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+
+* {
+  font-family: var(--font-main);
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+.h-font {
+  font-family: var(--font-heading);
+}
+
+/* ============================================
+   FORM ELEMENTS
+   ============================================ */
+
+/* Remove spinner buttons from number inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.custom-bg {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.custom-bg:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.h-line {
+  width: 150px;
+  height: 1.7px;
+  margin: 0 auto;
+  background-color: var(--primary-color);
+}
+
+.custom-alert {
+  position: fixed;
+  top: 80px;
+  right: 25px;
+  z-index: 1111;
+}

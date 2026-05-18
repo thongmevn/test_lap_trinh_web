@@ -1,8 +1,9 @@
 <?php
 
-// Load environment variables from .env if available
-if (file_exists(__DIR__ . '../../.env')) {
-  $lines = file(__DIR__ . '../../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+// Load environment variables from project root .env if available
+$env_path = __DIR__ . '/../../.env';
+if (file_exists($env_path)) {
+  $lines = file($env_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
   foreach ($lines as $line) {
     if (strpos(trim($line), '#') === 0) continue;
     list($name, $value) = array_map('trim', explode('=', $line, 2));
@@ -15,9 +16,10 @@ if (file_exists(__DIR__ . '../../.env')) {
 
 $hname = getenv('DB_HOST') ?: 'localhost';
 $uname = getenv('DB_USER') ?: 'root';
-$pass = getenv('DB_PASS') ?: '123456';
-$db   = getenv('DB_NAME') ?: 'vietchill';
+$pass = getenv('DB_PASS') ?: '';
+$db   = getenv('DB_NAME') ?: 'quanlykhachsan';
 
+mysqli_report(MYSQLI_REPORT_OFF);
 $con = mysqli_connect($hname, $uname, $pass, $db);
 
 if(!$con){

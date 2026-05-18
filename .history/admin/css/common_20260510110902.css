@@ -1,0 +1,415 @@
+/* ============================================
+   GLOBAL ADMIN STYLES - Eco-Friendly Stay Theme
+   ============================================ */
+
+/* Color Palette - Standardized */
+:root {
+  /* Primary: Forest green */
+  --primary-color: #2d6a4f;
+  --primary-hover: #1f4d38;
+
+  /* Secondary: Light moss green */
+  --secondary-color: #b7e4c7;
+
+  /* Accent: Cream */
+  --accent-color: #fff8e1;
+
+  /* Background: Earthy tan */
+  --bg-tan: #dda15e;
+
+  /* Neutral colors */
+  --white: #ffffff;
+  --black: #000000;
+  --gray-light: #f1f1f1;
+  --gray-dark: #242424;
+
+  /* Font sizing */
+  --font-main: "Lato", sans-serif;
+  --font-heading: "Merriweather", serif;
+  --base-font-size: 16px;
+}
+
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+
+* {
+  font-family: var(--font-main);
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-size: var(--base-font-size);
+  color: #222;
+  line-height: 1.6;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+.h-font {
+  font-family: var(--font-heading);
+}
+
+/* Typography and spacing improvements */
+body {
+  font-size: var(--base-font-size);
+  line-height: 1.6;
+  color: #222;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  color: #1f2d3d;
+  margin: 0 0 0.5rem 0;
+}
+h3 {
+  font-size: 1.5rem;
+}
+h4 {
+  font-size: 1.25rem;
+}
+
+/* Sidebar and nav */
+#dashboard-menu {
+  font-size: 0.95rem;
+}
+#dashboard-menu .menu-list a {
+  font-size: 0.95rem;
+}
+
+/* Form controls */
+input[type="text"],
+input[type="number"],
+textarea,
+select,
+.form-control,
+.form-select {
+  font-size: 0.95rem;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+/* Tables */
+table,
+.table {
+  font-size: 0.95rem;
+}
+table th {
+  font-weight: 700;
+}
+table td,
+table th {
+  padding: 12px;
+}
+
+/* Modal form layout */
+.modal .modal-body label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.modal .modal-body .row {
+  gap: 8px;
+}
+.modal .modal-dialog {
+  max-width: 900px;
+  margin: 6% auto;
+}
+.modal .modal-content {
+  padding: 0;
+  border-radius: 8px;
+}
+
+/* Buttons */
+.btn {
+  font-size: 0.95rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+}
+
+/* Cards */
+.card-body {
+  padding: 1.25rem;
+}
+
+/* Dashboard tiles styling */
+#main-content .dash-row {
+  display: flex;
+  gap: 15px;
+}
+
+.dash-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(31, 45, 61, 0.06);
+  border: 1px solid rgba(31, 45, 61, 0.06);
+}
+
+.dash-card h6 {
+  font-size: 0.95rem;
+  color: #4a5568;
+  margin-bottom: 0.4rem;
+}
+.dash-card h1 {
+  font-size: 2rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.dash-success {
+  border-left: 6px solid #28a745;
+}
+.dash-warning {
+  border-left: 6px solid #ffc107;
+}
+.dash-info {
+  border-left: 6px solid #0dcaf0;
+}
+.dash-primary {
+  border-left: 6px solid #0d6efd;
+}
+.dash-danger {
+  border-left: 6px solid #dc3545;
+}
+
+/* Action buttons (non-bootstrap) */
+.btn-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+.btn-edit {
+  background: #0d6efd;
+  color: #fff;
+}
+.btn-images {
+  background: #17a2b8;
+  color: #fff;
+}
+.btn-delete {
+  background: #dc3545;
+  color: #fff;
+}
+.btn-custom:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+/* Modal width increase for rooms modal */
+.modal .modal-dialog {
+  max-width: 1100px;
+}
+
+/* Add-room image previews */
+#add-room-previews {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.preview-item {
+  width: 90px;
+  height: 70px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.preview-item button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+
+/* ============================================
+   FORM ELEMENTS
+   ============================================ */
+
+/* Remove spinner buttons from number inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.custom-bg {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.custom-bg:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.h-line {
+  width: 150px;
+  height: 1.7px;
+  margin: 0 auto;
+  background-color: var(--primary-color);
+}
+
+.custom-alert {
+  position: fixed;
+  top: 80px;
+  right: 25px;
+  z-index: 1111;
+}
+
+/* ============================================
+   DASHBOARD LAYOUT
+   ============================================ */
+
+#dashboard-menu {
+  position: fixed;
+  height: 100%;
+  z-index: 11;
+}
+
+#main-content {
+  margin-left: 220px;
+  width: calc(100% - 220px);
+  transition: margin 0.3s ease;
+}
+
+#main-content .col-10 {
+  width: 100%;
+  margin-left: 0;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+/* Track */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-light);
+}
+
+/* Thumb/Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--gray-dark);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media screen and (max-width: 991px) {
+  #dashboard-menu {
+    height: auto;
+    width: 100%;
+  }
+
+  #main-content {
+    margin-left: 0;
+    width: 100%;
+    margin-top: 60px;
+  }
+}
+
+/* Strong fallback to prevent sidebar overlay issues on some pages
+   These rules use higher specificity/!important to override page-level
+   inline styles that caused #main-content to not shift right. */
+
+#dashboard-menu {
+  width: 220px !important;
+  left: 0 !important;
+  top: 0 !important;
+  position: fixed !important;
+  z-index: 11 !important;
+}
+
+#main-content {
+  margin-left: 220px !important;
+  width: calc(100% - 220px) !important;
+}
+
+@media screen and (max-width: 991px) {
+  #dashboard-menu {
+    position: relative !important;
+    width: 100% !important;
+  }
+  #main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    margin-top: 60px !important;
+  }
+}
+
+/* Modal baseline for admin pages - hide by default (show via .show)
+   Prevent modal markup from appearing inline and breaking layout. */
+.modal {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1200;
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal .modal-dialog {
+  margin: 6% auto;
+  max-width: 900px;
+}
+
+.modal .modal-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 0;
+}

@@ -1,15 +1,26 @@
 <?php 
 
+  ob_start();
   require('../admin/inc/db_config.php');
   require('../admin/inc/essentials.php');
-
+  ob_end_clean();
   
 
   if(isset($_POST['check_availability']))
   {
+    header('Content-Type: application/json');
+
     $frm_data = filteration($_POST);
     $status = "";
     $result = "";
+
+    $settings_q = select("SELECT `shutdown` FROM `settings` WHERE `sr_no`=? LIMIT 1",[1],'i');
+    $settings_r = mysqli_fetch_assoc($settings_q);
+
+    if($settings_r && $settings_r['shutdown']){
+      echo json_encode(['status'=>'shutdown']);
+      exit;
+    }
 
     // check in and out validations
 
@@ -39,6 +50,11 @@
     else{
       session_start();
 
+      if(!isset($_SESSION['room']) || !isset($_SESSION['uId'])){
+        echo json_encode(['status'=>'session_expired']);
+        exit;
+      }
+
       // run query to check room is available or not 
 
       $tb_query = "SELECT COUNT(*) AS `total_bookings` FROM `booking_order`
@@ -51,7 +67,7 @@
       $rq_result = select("SELECT `quantity` FROM `rooms` WHERE `id`=?",[$_SESSION['room']['id']],'i');
       $rq_fetch = mysqli_fetch_assoc($rq_result);
 
-      if(($rq_fetch['quantity']-$tb_fetch['total_bookings'])==0){
+      if(($rq_fetch['quantity']-$tb_fetch['total_bookings'])<=0){
         $status = 'unavailable';
         $result = json_encode(['status'=>$status]);
         echo $result;

@@ -20,7 +20,7 @@
     }
 
     #main-content {
-        width: 100%;
+        padding: 24px;
     }
 
     .row {
@@ -29,7 +29,7 @@
 
     .col-lg-10 {
         width: 83.3333%;
-        margin-left: auto;
+        margin-left: 0;
         padding: 24px;
         overflow: hidden;
     }

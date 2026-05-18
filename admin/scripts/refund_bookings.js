@@ -23,16 +23,18 @@ function refund_booking(id)
     let xhr = new XMLHttpRequest();
     xhr.open("POST","ajax/refund_bookings.php",true);
 
-    xhr.onload = function()
-    {
-      if(this.responseText == 1){
-        alert('success','Money Refunded!');
+  xhr.onload = function()
+  {
+      let res = this.responseText.trim();
+
+      if(res == 1){
+        alert('success','Đã xác nhận hoàn tiền!');
         get_bookings();
       }
       else{
-        alert('error','Server Down!');
+        alert('error','Không thể xác nhận hoàn tiền!');
       }
-    }
+  }
 
     xhr.send(data);
   }

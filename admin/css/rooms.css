@@ -1,0 +1,208 @@
+/* ============================================
+   ADMIN ROOMS MANAGEMENT - Styles
+   ============================================ */
+
+/* ============================================
+   ROOM MANAGEMENT TABLE
+   ============================================ */
+
+.rooms-container {
+  padding: 20px;
+  background: var(--white);
+  border-radius: 8px;
+}
+
+.rooms-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.rooms-title {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.btn-add-room {
+  padding: 10px 20px;
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-add-room:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   ROOM TABLE
+   ============================================ */
+
+.rooms-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.rooms-table thead {
+  background: var(--primary-color);
+  color: var(--white);
+}
+
+.rooms-table th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  border: 1px solid var(--gray-light);
+}
+
+.rooms-table td {
+  padding: 12px 15px;
+  border: 1px solid var(--gray-light);
+  vertical-align: middle;
+}
+
+.rooms-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.rooms-table tbody tr:hover {
+  background: var(--accent-color);
+}
+
+.rooms-table tbody tr:nth-child(even) {
+  background: var(--white);
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+
+.btn-action {
+  padding: 6px 12px;
+  margin: 0 3px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-edit {
+  background: var(--secondary-color);
+  color: var(--black);
+}
+
+.btn-edit:hover {
+  background: #a8d9b8;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: var(--white);
+}
+
+.btn-delete:hover {
+  background: #c82333;
+}
+
+.btn-view {
+  background: var(--primary-color);
+  color: var(--white);
+}
+
+.btn-view:hover {
+  background: var(--primary-hover);
+}
+
+/* ============================================
+   ROOM FORM
+   ============================================ */
+
+.room-form {
+  background: var(--white);
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--gray-light);
+  border-radius: 4px;
+  font-family: var(--font-main);
+  font-size: 14px;
+  transition: border 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(45, 106, 79, 0.2);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media screen and (max-width: 768px) {
+  .rooms-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .rooms-table {
+    font-size: 14px;
+  }
+
+  .rooms-table th,
+  .rooms-table td {
+    padding: 8px 10px;
+  }
+
+  .btn-action {
+    padding: 5px 8px;
+    font-size: 12px;
+    margin: 2px 1px;
+  }
+
+  .room-form {
+    padding: 15px;
+  }
+}

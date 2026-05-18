@@ -1,7 +1,9 @@
 <?php 
 
+  ob_start();
   require('../inc/db_config.php');
   require('../inc/essentials.php');
+  ob_end_clean();
   adminLogin();
 
   if(isset($_POST['get_bookings']))

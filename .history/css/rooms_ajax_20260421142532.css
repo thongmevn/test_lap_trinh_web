@@ -1,0 +1,64 @@
+.room-card {
+  background: #fff;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.room-row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 15px;
+  align-items: center;
+}
+
+.room-img-col {
+  width: 40%;
+}
+
+.room-img {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.room-info-col {
+  width: 40%;
+  padding: 0 15px;
+}
+
+.room-action-col {
+  width: 20%;
+  text-align: center;
+}
+
+.room-title {
+  margin-bottom: 10px;
+}
+
+.room-price {
+  margin-bottom: 15px;
+}
+
+.badge-custom {
+  display: inline-block;
+  background: #f1f1f1;
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin: 3px;
+  font-size: 12px;
+}
+
+.btn-outline-custom {
+  display: block;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #000;
+  color: #000;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.btn-outline-custom:hover {
+  background: #000;
+  color: #fff;
+}

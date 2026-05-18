@@ -1,7 +1,9 @@
 <?php
 
+  ob_start();
   require('../inc/db_config.php');
   require('../inc/essentials.php');
+  ob_end_clean();
   adminLogin();
 
   if(isset($_POST['get_general'])) {
@@ -23,12 +25,102 @@
   }
 
   if(isset($_POST['upd_shutdown'])) {
-    $frm_data = $_POST['upd_shutdown'];
+    $frm_data = ($_POST['upd_shutdown'] == 1) ? 1 : 0;
 
     $q = "UPDATE `settings` SET `shutdown` = ? WHERE `sr_no` = ?";
     $values = [$frm_data,1];
     $res = update($q,$values,'ii');
+
+    if($res == 1){
+      echo 1;
+    }
+    else{
+      $check_res = select("SELECT `shutdown` FROM `settings` WHERE `sr_no` = ? LIMIT 1",[1],'i');
+      $check_data = mysqli_fetch_assoc($check_res);
+      echo ($check_data && (int)$check_data['shutdown'] === (int)$frm_data) ? 1 : 0;
+    }
+  }
+
+  if(isset($_POST['get_contacts'])) {
+    $q = "SELECT * FROM `contact_details` WHERE `sr_no` = ?";
+    $values = [1];
+    $res = select($q,$values,"i");
+    $data = mysqli_fetch_assoc($res);
+    echo json_encode($data);
+  }
+
+  if(isset($_POST['upd_contacts'])) {
+    $frm_data = filteration($_POST);
+
+    $q = "UPDATE `contact_details` SET `address`=?, `gmap`=?, `pn1`=?, `email`=?, `fb`=?, `insta`=?, `tw`=?, `iframe`=? WHERE `sr_no`=?";
+    $values = [
+      $frm_data['address'],
+      $frm_data['gmap'],
+      $frm_data['pn1'],
+      $frm_data['email'],
+      $frm_data['fb'],
+      $frm_data['insta'],
+      $frm_data['tw'],
+      $frm_data['iframe'],
+      1
+    ];
+    $res = update($q,$values,'ssisssssi');
     echo $res;
+  }
+
+  if(isset($_POST['add_member'])) {
+    $frm_data = filteration($_POST);
+    $img_r = uploadImage($_FILES['picture'],ABOUT_FOLDER);
+
+    if($img_r == 'inv_img' || $img_r == 'inv_size' || $img_r == 'upd_failed'){
+      echo $img_r;
+    }
+    else{
+      $q = "INSERT INTO `team_details`(`name`, `picture`) VALUES (?,?)";
+      $values = [$frm_data['name'],$img_r];
+      $res = insert($q,$values,'ss');
+      echo $res;
+    }
+  }
+
+  if(isset($_POST['get_members'])) {
+    $res = selectAll('team_details');
+    $path = ABOUT_IMG_PATH;
+
+    while($row = mysqli_fetch_assoc($res))
+    {
+      echo <<<data
+        <div class="col-md-2 mb-3">
+          <div class="card border-0 shadow-sm">
+            <img src="$path$row[picture]" class="card-img-top">
+            <div class="card-body text-center">
+              <h6 class="card-title mb-2">$row[name]</h6>
+              <button type="button" onclick="rem_member($row[sr_no])" class="btn btn-danger btn-sm shadow-none">
+                Xoá
+              </button>
+            </div>
+          </div>
+        </div>
+      data;
+    }
+  }
+
+  if(isset($_POST['rem_member'])) {
+    $frm_data = filteration($_POST);
+    $values = [$frm_data['rem_member']];
+
+    $pre_q = "SELECT * FROM `team_details` WHERE `sr_no`=?";
+    $res = select($pre_q,$values,'i');
+    $img = mysqli_fetch_assoc($res);
+
+    if($img && deleteImage($img['picture'],ABOUT_FOLDER)){
+      $q = "DELETE FROM `team_details` WHERE `sr_no`=?";
+      $res = delete($q,$values,'i');
+      echo $res;
+    }
+    else{
+      echo 0;
+    }
   }
 
 ?>

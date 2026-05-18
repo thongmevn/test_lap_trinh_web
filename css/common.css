@@ -1,52 +1,126 @@
-:root{
-  --teal: #2D6A4F;
-  --teal_hover: #2D6A4F;
+/* ============================================
+   GLOBAL STYLES - Eco-Friendly Stay Theme
+   ============================================ */
+
+/* Color Palette */
+:root {
+  /* Primary: Forest green */
+  --primary-color: #2D6A4F;
+  --primary-hover: #1f4d38;
+  
+  /* Secondary: Light moss green */
+  --secondary-color: #B7E4C7;
+  
+  /* Accent: Cream */
+  --accent-color: #FFF8E1;
+  
+  /* Background: Earthy tan */
+  --bg-tan: #DDA15E;
+  
+  /* Neutral colors */
+  --white: #ffffff;
+  --black: #000000;
+  --gray-light: #f1f1f1;
+  --gray-dark: #242424;
+  
+  /* Font sizing */
+  --font-main: 'Lato', sans-serif;
+  --font-heading: 'Merriweather', serif;
 }
 
-*{
-  font-family: 'Lato', sans-serif;
-}
-.h-font{
-  font-family: 'Merriweather', serif;
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+
+* {
+  font-family: var(--font-main);
+  box-sizing: border-box;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+.h-font {
+  font-family: var(--font-heading);
+}
+
+/* ============================================
+   FORM ELEMENTS
+   ============================================ */
+
+/* Remove spinner buttons from number inputs */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
-.custom-bg{
-  background-color: var(--teal);
-  border: 1px solid var(--teal);
-}
-.custom-bg:hover{
-  background-color: var(--teal_hover);
-  border-color: var(--teal_hover);
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.custom-bg {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  transition: all 0.3s ease;
 }
 
-.h-line{
+.custom-bg:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.h-line {
   width: 150px;
+      height: 1.7px;
   margin: 0 auto;
-  height: 1.7px;
+  background-color: var(--primary-color);
 }
 
-.custom-alert{
+.custom-alert {
   position: fixed;
   top: 80px;
   right: 25px;
   z-index: 1111;
 }
 
-/* 
-Color pallete: Eco-Friendly Stay
+/* Modal fallback: app uses Bootstrap CSS classes, but modal behavior is handled locally. */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1055;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
 
-•	Primary: Forest green (#2D6A4F)
-•	Secondary: Light moss green (#B7E4C7)
-•	Accent: Cream (#FFF8E1)
-•	Background: Earthy tan (#DDA15E)
-*/
+.modal.show {
+  display: block;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  background-color: #000;
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+
+body.modal-open {
+  overflow: hidden;
+}

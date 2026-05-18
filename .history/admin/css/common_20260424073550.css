@@ -1,0 +1,149 @@
+/* ============================================
+   GLOBAL ADMIN STYLES - Eco-Friendly Stay Theme
+   ============================================ */
+
+/* Color Palette - Standardized */
+:root {
+  /* Primary: Forest green */
+  --primary-color: #2D6A4F;
+  --primary-hover: #1f4d38;
+  
+  /* Secondary: Light moss green */
+  --secondary-color: #B7E4C7;
+  
+  /* Accent: Cream */
+  --accent-color: #FFF8E1;
+  
+  /* Background: Earthy tan */
+  --bg-tan: #DDA15E;
+  
+  /* Neutral colors */
+  --white: #ffffff;
+  --black: #000000;
+  --gray-light: #f1f1f1;
+  --gray-dark: #242424;
+  
+  /* Font sizing */
+  --font-main: 'Lato', sans-serif;
+  --font-heading: 'Merriweather', serif;
+}
+
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+
+* {
+  font-family: var(--font-main);
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+.h-font {
+  font-family: var(--font-heading);
+}
+
+/* ============================================
+   FORM ELEMENTS
+   ============================================ */
+
+/* Remove spinner buttons from number inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.custom-bg {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.custom-bg:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.h-line {
+  width: 150px;
+  height: 1.7px;
+  margin: 0 auto;
+  background-color: var(--primary-color);
+}
+
+.custom-alert {
+  position: fixed;
+  top: 80px;
+  right: 25px;
+  z-index: 1111;
+}
+
+/* ============================================
+   DASHBOARD LAYOUT
+   ============================================ */
+
+#dashboard-menu {
+  position: fixed;
+  height: 100%;
+  z-index: 11;
+}
+
+#main-content {
+  transition: margin 0.3s ease;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+/* Track */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-light);
+}
+
+/* Thumb/Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--gray-dark);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media screen and (max-width: 991px) {
+  #dashboard-menu {
+    height: auto;
+    width: 100%;
+  }
+
+  #main-content {
+    margin-top: 60px;
+  }
+}

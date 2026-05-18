@@ -1,0 +1,127 @@
+/* ============================================
+   ROOM CARDS - Room Listing Styles
+   ============================================ */
+
+.room-card {
+  background: var(--white);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.room-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================
+   ROOM ROW LAYOUT
+   ============================================ */
+
+.room-row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 15px;
+  align-items: center;
+  gap: 15px;
+}
+
+.room-img-col {
+  flex: 0 0 40%;
+  min-width: 250px;
+}
+
+.room-img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.room-info-col {
+  flex: 0 0 40%;
+  min-width: 250px;
+  padding: 0 15px;
+}
+
+.room-action-col {
+  flex: 0 0 20%;
+  min-width: 120px;
+  text-align: center;
+}
+
+/* ============================================
+   ROOM INFORMATION
+   ============================================ */
+
+.room-title {
+  margin-bottom: 10px;
+  font-family: var(--font-heading);
+  color: var(--primary-color);
+}
+
+.room-price {
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+/* ============================================
+   BADGES & BUTTONS
+   ============================================ */
+
+.badge-custom {
+  display: inline-block;
+  background: var(--gray-light);
+  color: var(--gray-dark);
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin: 3px;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.badge-custom:hover {
+  background: var(--secondary-color);
+}
+
+.btn-outline-custom {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: 2px solid var(--black);
+  color: var(--black);
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-outline-custom:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media screen and (max-width: 768px) {
+  .room-row {
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  .room-img-col,
+  .room-info-col,
+  .room-action-col {
+    flex: 0 0 100%;
+    min-width: unset;
+  }
+
+  .room-info-col {
+    padding: 10px 0;
+  }
+}

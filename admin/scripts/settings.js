@@ -71,33 +71,45 @@ function upd_general(site_title_val,site_about_val)
     }
   }
 
-  xhr.send('site_title='+site_title_val+'&site_about='+site_about_val+'&upd_general');
+  let data = new URLSearchParams();
+  data.append('site_title',site_title_val);
+  data.append('site_about',site_about_val);
+  data.append('upd_general','');
+
+  xhr.send(data.toString());
 }
 
 function upd_shutdown(val)
 {
+  let shutdown_toggle = document.getElementById('shutdown-toggle');
+  let new_status = shutdown_toggle.checked ? 1 : 0;
+
   let xhr = new XMLHttpRequest();
   xhr.open("POST","ajax/settings_crud.php",true);
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
   xhr.onload = function(){
-    if(this.responseText == 1 && general_data.shutdown==0)
+    if(this.responseText == 1 && new_status==1)
     {
-      alert('success','Site has been shutdown!');
+      alert('success','Đã bật chế độ bảo trì!');
+    }
+    else if(this.responseText == 1)
+    {
+      alert('success','Đã tắt chế độ bảo trì!');
     }
     else
     {
-      alert('success','Shutdown mode off!');
+      alert('error','Cập nhật bảo trì thất bại!');
     }
     get_general();
   }
 
-  xhr.send('upd_shutdown='+val);
+  xhr.send('upd_shutdown='+new_status);
 }
 
 function get_contacts()
 {
-  let contacts_p_id = ['address','gmap','pn1','pn2','email','fb','insta','tw'];
+  let contacts_p_id = ['address','gmap','pn1','email','fb','insta','tw'];
   let iframe = document.getElementById('iframe');
 
   let xhr = new XMLHttpRequest();
@@ -106,12 +118,14 @@ function get_contacts()
 
   xhr.onload = function(){
     contacts_data = JSON.parse(this.responseText);
-    contacts_data = Object.values(contacts_data);
 
     for(i=0;i<contacts_p_id.length;i++){
-      document.getElementById(contacts_p_id[i]).innerText = contacts_data[i+1];
+      let current_el = document.getElementById(contacts_p_id[i]);
+      if(current_el){
+        current_el.innerText = contacts_data[contacts_p_id[i]] || '';
+      }
     }
-    iframe.src = contacts_data[9];
+    iframe.src = contacts_data.iframe || '';
     contacts_inp(contacts_data);
   }
 
@@ -120,10 +134,22 @@ function get_contacts()
 
 function contacts_inp(data)
 {
-  let contacts_inp_id = ['address_inp','gmap_inp','pn1_inp','pn2_inp','email_inp','fb_inp','insta_inp','tw_inp','iframe_inp'];
+  let contacts_inp_id = {
+    address: 'address_inp',
+    gmap: 'gmap_inp',
+    pn1: 'pn1_inp',
+    email: 'email_inp',
+    fb: 'fb_inp',
+    insta: 'insta_inp',
+    tw: 'tw_inp',
+    iframe: 'iframe_inp'
+  };
 
-  for(i=0;i<contacts_inp_id.length;i++){
-    document.getElementById(contacts_inp_id[i]).value = data[i+1];
+  for(let key in contacts_inp_id){
+    let current_inp = document.getElementById(contacts_inp_id[key]);
+    if(current_inp){
+      current_inp.value = data[key] || '';
+    }
   }
 }
 
@@ -134,15 +160,23 @@ contacts_s_form.addEventListener('submit',function(e){
 
 function upd_contacts()
 {
-  let index = ['address','gmap','pn1','pn2','email','fb','insta','tw','iframe'];
-  let contacts_inp_id = ['address_inp','gmap_inp','pn1_inp','pn2_inp','email_inp','fb_inp','insta_inp','tw_inp','iframe_inp'];
-  
-  let data_str="";
+  let fields = {
+    address: 'address_inp',
+    gmap: 'gmap_inp',
+    pn1: 'pn1_inp',
+    email: 'email_inp',
+    fb: 'fb_inp',
+    insta: 'insta_inp',
+    tw: 'tw_inp',
+    iframe: 'iframe_inp'
+  };
 
-  for(i=0;i<index.length;i++){
-    data_str += index[i] + "=" + document.getElementById(contacts_inp_id[i]).value + '&';
+  let data = new URLSearchParams();
+
+  for(let key in fields){
+    data.append(key,document.getElementById(fields[key]).value);
   }
-  data_str += "upd_contacts";
+  data.append('upd_contacts','');
 
   let xhr = new XMLHttpRequest();
   xhr.open("POST","ajax/settings_crud.php",true);
@@ -163,7 +197,7 @@ function upd_contacts()
     }
   }
 
-  xhr.send(data_str);
+  xhr.send(data.toString());
 }
 
 team_s_form.addEventListener('submit',function(e){
